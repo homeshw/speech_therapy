@@ -1,15 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import AudioPlayer from './AudioPlayer';
 import WordSelector from './WordSelector';
+import BasicModal from './Popup';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import word1 from './audio_clips/word1.mp3';
 import word2 from './audio_clips/word2.mp3';
 import word3 from './audio_clips/word3.mp3';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const App = () => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [currentClip, setCurrentClip] = useState({});
+  const [message, setMessage] = useState({});
   const [showPopup, setShowPopup] = useState(false);
   const [playAudio, setPlayAudio] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
   const audioClips = [
     { src: word1, correctWord: 'Word1' },
     { src: word2, correctWord: 'Word2' },
@@ -19,6 +41,7 @@ const App = () => {
 
   const selectRandomClip = () => {
     const randomIndex = Math.floor(Math.random() * audioClips.length);
+    console.log(randomIndex)
     return audioClips[randomIndex];
   };
 
@@ -28,32 +51,44 @@ const App = () => {
 
   const handleWordSelect = word => {
     setSelectedWord(word);
+    word === currentClip.correctWord ? setMessage('Correct!') : setMessage('Incorrect!')
     setShowPopup(true);
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    handleClose();
     setCurrentClip(selectRandomClip());
   };
 
-  const handlePlayButton = () => {
-    setPlayAudio(true);
-  };
 
   return (
     <div>
       <AudioPlayer src={currentClip.src} />
-      <button onClick={handlePlayButton}>Play Audio</button>
       <WordSelector words={words} onSelect={handleWordSelect} />
       {showPopup && (
         <div className="popup">
-          {selectedWord === currentClip.correctWord ? 'Correct!' : 'Incorrect!'}
-          <button onClick={handleClosePopup}>Close</button>
+
+          <Modal
+            open={true}
+            onClose={handleClose}
+          >
+            <Box sx={style}>
+              <div>{message}
+              </div>
+
+              <Button onClick={handleClosePopup}>Close</Button>
+
+            </Box>
+
+          </Modal>
+          {open}
+
         </div>
       )}
     </div>
 
-    
+
   );
 };
 

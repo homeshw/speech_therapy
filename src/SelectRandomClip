@@ -1,0 +1,5 @@
+const SelectRandomClip = ({ src }) => {
+    return <audio src={src} type="audio/mpeg" controls />;
+  };
+  
+export default SelectRandomClip;
