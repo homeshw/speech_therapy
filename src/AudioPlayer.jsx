@@ -20,7 +20,7 @@ const AudioPlayer = ({ src, play }) => {
       <audio ref={audioRef} src={src} controls>
         Your browser does not support the audio element.
       </audio>
-      <button onClick={handlePlayButton}>Play Audio</button>
+      {/* <button onClick={handlePlayButton}>Play Audio</button> */}
     </div>
   );
 };

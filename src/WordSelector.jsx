@@ -1,10 +1,13 @@
+import Button from '@mui/material/Button';
+import * as React from 'react';
+
 const WordSelector = ({ words, onSelect }) => {
     return (
       <div>
         {words.map(word => (
-          <button key={word} onClick={() => onSelect(word)}>
+          <Button variant="contained" key={word} onClick={() => onSelect(word)}>
             {word}
-          </button>
+          </Button>
         ))}
       </div>
     );
