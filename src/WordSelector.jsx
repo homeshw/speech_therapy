@@ -1,17 +1,22 @@
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import * as React from 'react';
 
 const WordSelector = ({ words, onSelect }) => {
-    return (
-      <div>
+  return (
+    <Box sx={{ width: '50%', textAlign: 'center' }}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 2 }}>
         {words.map(word => (
-          <Button variant="contained" key={word} onClick={() => onSelect(word)}>
-            {word}
-          </Button>
+          <Grid item xs={3}>
+            <Button variant="outlined" key={word} onClick={() => onSelect(word)}>
+              {word}
+            </Button>
+          </Grid>
         ))}
-      </div>
-    );
-  };
+      </Grid>
+    </Box>
+  );
+};
 
-  export default WordSelector;
-  
+export default WordSelector;
