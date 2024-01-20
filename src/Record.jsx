@@ -5,6 +5,7 @@ import axios from 'axios';
 function RecordPage() {
 
     const [file, setFile] = useState(null);
+    const [url, setUrl] = useState(null);
 
     const serverPort = 5001;
 
@@ -15,29 +16,41 @@ function RecordPage() {
         audio.src = url;
         audio.controls = true;
         document.body.appendChild(audio);
+        setUrl(url)
     };
 
     const saveRecording = (blob) => {
-        if (blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            document.body.appendChild(a);
-            a.style = 'display: none';
-            a.href = url;
-            a.download = 'recorded_audio.mp3';
-            a.click();
-            window.URL.revokeObjectURL(url);
+        const audiofile = new File([blob], "audiofile.mp3", {
+            type: "audio/mpeg",
+        });
+        handleFileUpload(audiofile)
+        setFile(audiofile)
+
+        // const url = URL.createObjectURL(blob);
+        // const audio = document.createElement("audio");
+        // audio.src = url;
+        // audio.controls = true;
+        // document.body.appendChild(audio);
+    };
+
+    const handleFileChange = (blob) => {
+        //setFile(e.target.files[0]);
+        if (blob){
+            saveRecording(blob)
+            const audiofile = new File([blob], "audiofile.mp3", {
+                type: "audio/mpeg",
+            });
+            setFile(audiofile)
         }
+        
     };
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
-
-    const handleFileUpload = async () => {
+    const handleFileUpload = async (f) => {
         try {
+            const audioBlob = await fetch(url).then((r) => r.blob());
+            const audioFile = new File([audioBlob], 'voice.wav', { type: 'audio/wav' });
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', audioFile);
 
             // Replace 'http://localhost:5000/upload' with your server endpoint
             await axios.post('http://localhost:' + serverPort + '/upload', formData, {
@@ -45,6 +58,8 @@ function RecordPage() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
+            setFile(null)
 
             console.log('File uploaded successfully!');
         } catch (error) {
@@ -55,8 +70,8 @@ function RecordPage() {
     return (
         <div>
             <AudioRecorder
-                // onRecordingComplete={(blob) => addAudioElement(blob)}
-                onRecordingComplete={(blob) => saveRecording(blob)}
+                onRecordingComplete={(blob) => addAudioElement(blob)}
+                //onRecordingComplete={(blob) => handleFileChange(blob)}
                 recorderControls={recorderControls}
             />
             <button onClick={recorderControls.stopRecording}>Stop recording</button>
