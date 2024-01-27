@@ -3,13 +3,14 @@ import React, { useEffect, useRef } from 'react';
 const AudioPlayer = ({ src, play }) => {
   const audioRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (play) {
-  //     audioRef.current.play();
-  //   } else {
-  //     audioRef.current.pause();
-  //   }
-  // }, [play]);
+  useEffect(() => {
+    console.log(src)
+    if (play) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [play]);
 
   const handlePlayButton = () => {
     audioRef.current.play();
