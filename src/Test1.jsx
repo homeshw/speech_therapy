@@ -7,8 +7,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 
-//import word1 from './audio_clips/word1.mp3';
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -39,10 +37,10 @@ function Test1() {
   const serverPort = 5001;
 
   const selectRandomClip = () => {
-      const randomIndex = Math.floor(Math.random() * testArray.length);
-      const x = testArray[randomIndex]
-      setCurrentClip(x)
-    };
+    const randomIndex = Math.floor(Math.random() * testArray.length);
+    const x = testArray[randomIndex]
+    setCurrentClip(x)
+  };
 
   const effectRan = useRef(false);
 
@@ -54,16 +52,16 @@ function Test1() {
   }, []);
 
   useEffect(() => {
-    if(testArray){
-      selectRandomClip()      
-    }    
-  }, [testArray,clipToggle])
+    if (testArray) {
+      selectRandomClip()
+    }
+  }, [testArray, clipToggle])
 
   useEffect(() => {
-    if(Object.keys(currentClip).length > 0){
+    if (Object.keys(currentClip).length > 0) {
       console.log(currentClip.src)
       setAudioUrl('http://localhost:' + serverPort + '/get/audio/' + currentClip.src)
-    }    
+    }
   }, [currentClip])
 
   const handleWordSelect = word => {
@@ -80,8 +78,8 @@ function Test1() {
 
   const fetchAudio = async () => {
     console.log("fetching audio")
-    try{
-      console.log('current clip obj: ' )
+    try {
+      console.log('current clip obj: ')
       console.log(currentClip)
       const response = await axios.get('http://localhost:' + serverPort + '/get/audio/' + currentClip.src)
     } catch (error) {
@@ -90,7 +88,7 @@ function Test1() {
   }
 
   const fetchArray = async () => {
-    try{
+    try {
       const response = await axios.get('http://localhost:' + serverPort + '/get/testarray');
       console.log('fetch test array')
       console.log(response['data'])
@@ -105,7 +103,7 @@ function Test1() {
       <AudioPlayer src={audioUrl} />
       {testArray && (
         <WordSelector words={testArray} onSelect={handleWordSelect} />
-      )}      
+      )}
       {showPopup && (
         <div className="popup">
 

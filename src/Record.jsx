@@ -16,7 +16,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
 
 function RecordPage() {
 
@@ -36,39 +36,14 @@ function RecordPage() {
 
     const recorderControls = useAudioRecorder()
 
-    useEffect(()=>{
-       },[refresh])
+    useEffect(() => {
+    }, [refresh])
 
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
-        // const audio = document.createElement("audio");
-        // audio.src = url;
-        // audio.controls = true;
-        // document.body.appendChild(audio);
         setUrl(url);
         setShowPopup(true)
     };
-
-    // const saveRecording = (blob) => {
-    //     const audiofile = new File([blob], "audiofile.mp3", {
-    //         type: "audio/mpeg",
-    //     });
-    //     handleFileUpload(audiofile)
-    //     //setFile(audiofile)
-    //     handleClosePopup();
-    // };
-
-    // const handleFileChange = (blob) => {
-    //     //setFile(e.target.files[0]);
-    //     if (blob) {
-    //         saveRecording(blob)
-    //         const audiofile = new File([blob], "audiofile.mp3", {
-    //             type: "audio/mpeg",
-    //         });
-    //         setFile(audiofile)
-    //     }
-
-    // };
 
     const handleFileUpload = async (f) => {
 
@@ -77,10 +52,13 @@ function RecordPage() {
             return;
         }
         try {
+            alert(JSON.stringify(fileName));
+            //return;
             const audioBlob = await fetch(url).then((r) => r.blob());
             const audioFile = new File([audioBlob], fileName + '.wav', { type: 'audio/wav' });
             const formData = new FormData();
             formData.append('file', audioFile);
+            formData.append('word', fileName)
 
             // Replace 'http://localhost:5000/upload' with your server endpoint
             await axios.post('http://localhost:' + serverPort + '/upload', formData, {
@@ -91,7 +69,7 @@ function RecordPage() {
 
             setFile(null)
 
-            
+
 
             console.log('File uploaded successfully!');
         } catch (error) {
@@ -114,7 +92,7 @@ function RecordPage() {
                 //onRecordingComplete={(blob) => handleFileChange(blob)}
                 recorderControls={recorderControls}
             />
-            
+
 
             {showPopup && (
                 <div className="popup">
@@ -122,13 +100,13 @@ function RecordPage() {
                     <Modal open={true} onClose={handleClose}>
 
                         <Box sx={style}>
-                        <audio controls>
+                            <audio controls>
                                 <source src={url} type="audio/mpeg" />
                                 Your browser does not support the audio tag.
                             </audio>
 
                             <TextField id="label" label="File Name" variant="outlined" onChange={(e) => setFileName(e.target.value)} />
-                            <Box> 
+                            <Box>
                                 <Button onClick={handleFileUpload}>Save Recording</Button>
                                 <Button onClick={handleClosePopup}>Close Without Saving</Button>
                             </Box>
@@ -140,7 +118,6 @@ function RecordPage() {
                 </div>
             )}
         </div>
-
 
     )
 
