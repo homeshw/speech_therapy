@@ -68,3 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Docker
+
+## development environment
+
+docker build -t speech_therapy_web:v0.9 -f Dockerfile.dev .
+docker run --name speech_therapy_web -p 3000:3000 speech_therapy_web:v0.9
+
+## production environment
+
+docker build -t speech_therapy_web:v1 -f Dockerfile.production .
+docker run --name speech_therapy_web -p 3000:80 -e REACT_APP_API_URL=http://localhost:5001 speech_therapy_web:v1
