@@ -6,18 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import './App.css';
 
 function Test1() {
   const [selectedWord, setSelectedWord] = useState(null);
@@ -30,11 +19,14 @@ function Test1() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // Access the API endpoint
+  const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+
+  console.log(apiEndpoint)
+
   const [audioUrl, setAudioUrl] = useState('');
 
   const [testArray, setTestArray] = useState(null);
-
-  const serverPort = 5001;
 
   const selectRandomClip = () => {
     const randomIndex = Math.floor(Math.random() * testArray.length);
@@ -60,7 +52,7 @@ function Test1() {
   useEffect(() => {
     if (Object.keys(currentClip).length > 0) {
       console.log(currentClip.src)
-      setAudioUrl('http://localhost:' + serverPort + '/get/audio/' + currentClip.src)
+      setAudioUrl(apiEndpoint + '/get/audio/' + currentClip.src)
     }
   }, [currentClip])
 
@@ -81,7 +73,7 @@ function Test1() {
     try {
       console.log('current clip obj: ')
       console.log(currentClip)
-      const response = await axios.get('http://localhost:' + serverPort + '/get/audio/' + currentClip.src)
+      const response = await axios.get(apiEndpoint + '/get/audio/' + currentClip.src)
     } catch (error) {
       console.error('Error fetching audio: ', error);
     }
@@ -89,7 +81,7 @@ function Test1() {
 
   const fetchArray = async () => {
     try {
-      const response = await axios.get('http://localhost:' + serverPort + '/get/testarray');
+      const response = await axios.get(apiEndpoint + '/get/testarray');
       console.log('fetch test array')
       console.log(response['data'])
       setTestArray(response['data'])
@@ -99,8 +91,9 @@ function Test1() {
   }
 
   return (
-    <div>
-      <AudioPlayer src={audioUrl} />
+    <>
+      <div className="audio-player"><AudioPlayer src={audioUrl} /></div>
+      
       {testArray && (
         <WordSelector words={testArray} onSelect={handleWordSelect} />
       )}
@@ -111,7 +104,17 @@ function Test1() {
             open={true}
             onClose={handleClose}
           >
-            <Box sx={style}>
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}>
               <div>{message}
               </div>
 
@@ -124,7 +127,7 @@ function Test1() {
 
         </div>
       )}
-    </div>
+    </>
 
 
   );

@@ -54,3 +54,29 @@
 .tab-content {
   margin-top: 20px;
 }
+
+.audio-player {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.word-selector-box {
+  text-align: center;
+  margin-left: 50px;
+}
+
+.audio-recorder {
+  margin-top: 50px;
+}
+
+.record-popup-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-text {
+  text-align: center;
+}
+

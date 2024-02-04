@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import './App.css';
 
 const style = {
     position: 'absolute',
@@ -32,7 +33,8 @@ function RecordPage() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const serverPort = 5001;
+    // Access the API endpoint
+    const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
 
     const recorderControls = useAudioRecorder()
 
@@ -52,16 +54,20 @@ function RecordPage() {
             return;
         }
         try {
-            alert(JSON.stringify(fileName));
-            //return;
+
+            let fileNameUnicodeRep = ''; // Unicode representation of the file name
+            for (let i = 0; i < fileName.length; i++) {
+                fileNameUnicodeRep = fileNameUnicodeRep + fileName.charCodeAt(i);
+            }
+            console.log(fileNameUnicodeRep);
+
             const audioBlob = await fetch(url).then((r) => r.blob());
-            const audioFile = new File([audioBlob], fileName + '.wav', { type: 'audio/wav' });
+            const audioFile = new File([audioBlob], fileNameUnicodeRep + '.wav', { type: 'audio/wav' });
             const formData = new FormData();
             formData.append('file', audioFile);
-            formData.append('word', fileName)
+            formData.append('word', fileName);
 
-            // Replace 'http://localhost:5000/upload' with your server endpoint
-            await axios.post('http://localhost:' + serverPort + '/upload', formData, {
+            await axios.post(apiEndpoint + '/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -69,11 +75,9 @@ function RecordPage() {
 
             setFile(null)
 
-
-
-            console.log('File uploaded successfully!');
+            alert('File uploaded successfully!');
         } catch (error) {
-            console.error('Error uploading file:', error);
+            alert('Error uploading file:', error);
         }
 
         handleClosePopup();
@@ -86,12 +90,13 @@ function RecordPage() {
     };
 
     return (
-        <div>
-            <AudioRecorder
+        <>
+            <div class='audio-recorder'><AudioRecorder
                 onRecordingComplete={(blob) => addAudioElement(blob)}
                 //onRecordingComplete={(blob) => handleFileChange(blob)}
                 recorderControls={recorderControls}
-            />
+            /></div>
+
 
 
             {showPopup && (
@@ -106,10 +111,10 @@ function RecordPage() {
                             </audio>
 
                             <TextField id="label" label="File Name" variant="outlined" onChange={(e) => setFileName(e.target.value)} />
-                            <Box>
-                                <Button onClick={handleFileUpload}>Save Recording</Button>
-                                <Button onClick={handleClosePopup}>Close Without Saving</Button>
-                            </Box>
+                            <div className="record-popup-button-container">
+                                <Button className='popup-button' variant="contained" onClick={handleFileUpload}>Save Recording</Button>
+                                <Button className='popup-button' variant="outlined" onClick={handleClosePopup}>Cancel Saving</Button>
+                            </div>
                         </Box>
 
                     </Modal>
@@ -117,7 +122,7 @@ function RecordPage() {
 
                 </div>
             )}
-        </div>
+        </>
 
     )
 
