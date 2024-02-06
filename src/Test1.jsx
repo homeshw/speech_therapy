@@ -20,7 +20,9 @@ function Test1() {
   const handleClose = () => setOpen(false);
 
   // Access the API endpoint
-  const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+  const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
+
+  //console.log(window.config.REACT_APP_API_ENDPOINT);
 
   console.log(apiEndpoint)
 

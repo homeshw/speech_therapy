@@ -74,10 +74,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## development environment
 
-docker build -t speech_therapy_web:v0.9 -f Dockerfile.dev .
-docker run --name speech_therapy_web -p 3000:3000 speech_therapy_web:v0.9
+docker build -t speech_therapy_web_dev:latest -f Dockerfile.dev .
+docker run --name speech_therapy_web_dev -p 3000:3000 speech_therapy_web_dev:latest
 
 ## production environment
 
-docker build -t speech_therapy_web:v1 -f Dockerfile.production .
-docker run --name speech_therapy_web -p 3000:80 -e REACT_APP_API_URL=http://localhost:5001 speech_therapy_web:v1
+docker build -t speech_therapy_web:latest -f Dockerfile.production .
+docker run --name speech_therapy_web -p 3000:80 speech_therapy_web:latest
