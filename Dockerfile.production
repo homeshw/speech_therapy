@@ -17,8 +17,8 @@ COPY . .
 RUN npm run build
 
 # Use a smaller, production-ready image
-FROM arm64v8/nginx:alpine
-# FROM nginx:alpine
+# FROM arm64v8/nginx:alpine
+FROM nginx:alpine
 
 # Copy the built files from the previous stage to the nginx public directory
 COPY --from=build /app/build /usr/share/nginx/html
