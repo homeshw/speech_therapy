@@ -62,7 +62,7 @@ function Test1() {
   useEffect(() => {
     if (Object.keys(currentClip).length > 0) {
       console.log(currentClip.src)
-      setAudioUrl(apiEndpoint + '/get/audio/' + currentClip.src)
+      setAudioUrl(apiEndpoint + '/api/get/audio/' + currentClip.src)
     }
   }, [currentClip])
 
@@ -85,7 +85,7 @@ function Test1() {
       if(testArray.length > 0) {
 
         let selObj = testArray.find(item => item.word === word)
-        setAudioUrl(apiEndpoint + '/get/audio/' + selObj.src)
+        setAudioUrl(apiEndpoint + '/api/get/audio/' + selObj.src)
 
         const audioElement = document.getElementById('audio-player');
 
@@ -128,7 +128,7 @@ function Test1() {
   //   try {
   //     console.log('current clip obj: ')
   //     console.log(currentClip)
-  //     const response = await axios.get(apiEndpoint + '/get/audio/' + currentClip.src)
+  //     const response = await axios.get(apiEndpoint + '/api/get/audio/' + currentClip.src)
   //   } catch (error) {
   //     console.error('Error fetching audio: ', error);
   //   }
@@ -136,7 +136,7 @@ function Test1() {
 
   const fetchArray = async () => {
     try {
-      const response = await axios.get(apiEndpoint + '/get/testarray');
+      const response = await axios.get(apiEndpoint + '/api/get/testarray');
       console.log('fetch test array')
       console.log(response['data'])
       setTestArray(response['data'])

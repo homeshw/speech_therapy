@@ -67,7 +67,7 @@ function RecordPage() {
             formData.append('file', audioFile);
             formData.append('word', fileName);
 
-            await axios.post(apiEndpoint + '/upload', formData, {
+            await axios.post(apiEndpoint + '/api/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
