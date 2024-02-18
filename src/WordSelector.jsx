@@ -9,7 +9,7 @@ const WordSelector = ({ words, onSelect }) => {
       <Grid container rowSpacing={1} columnSpacing={{ xs: 2 }}>
         {words.map(word => (
           <Grid item xs={3}>
-            <Button variant="outlined" key={word.word} onClick={() => onSelect(word.word)}>
+            <Button id={word.word} key={word.word} onClick={() => onSelect(word.word)}>
               {word.word}
             </Button>
           </Grid>

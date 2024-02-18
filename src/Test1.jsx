@@ -36,7 +36,7 @@ function Test1() {
 
   const [testArray, setTestArray] = useState(null);
 
-  const audioRef = useRef(null);
+  //let audioRef = useRef(null);
 
   const selectRandomClip = () => {
     const randomIndex = Math.floor(Math.random() * testArray.length);
@@ -110,7 +110,20 @@ function Test1() {
     }
     else {
       //setSelectedWord(word);
-      word === currentClip.word ? setMessage('Correct!') : setMessage('Incorrect!')
+      if (word == currentClip.word){
+        setMessage('Correct!')
+      }
+      else {
+        setMessage('Incorrect!')
+        const correctButton = document.getElementById(currentClip.word);
+        if (correctButton) {
+          correctButton.style.backgroundColor = '#F6958E'
+          setTimeout(() => {
+            correctButton.style.backgroundColor = '';
+          }, 1000);
+        }
+
+      }
       setShowPopup(true);
     }
     
@@ -151,7 +164,7 @@ function Test1() {
       <FormControlLabel control={<Switch checked={tryWord} onChange={ (e) => setTryWord(e.target.checked)}/>} label="try!" />
     </FormGroup>
 
-      <div className="audio-player"><AudioPlayer ref={audioRef} src={audioUrl} play={false} /></div>
+      <div className="audio-player"><AudioPlayer src={audioUrl} play={false} /></div>
       
       {testArray && (
         <WordSelector words={testArray} onSelect={handleWordSelect} />
