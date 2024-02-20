@@ -15,7 +15,8 @@ function Test1() {
   //const [selectedWord, setSelectedWord] = useState(null);
   const [currentClip, setCurrentClip] = useState({});
   const [message, setMessage] = useState({});
-  const [showPopup, setShowPopup] = useState(false);
+  const [showImmediateResultPopup, setShowImmediateResultPopup] = useState(false);
+  const [showStartNewPopup, setShowStartNewPopup] = useState(false);
   //const [playAudio, setPlayAudio] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [clipToggle, setClipToggle] = React.useState(false);
@@ -25,6 +26,12 @@ function Test1() {
 
   // Access the API endpoint
   const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
+
+  const initLength = window.config.REACT_APP_TEST1_LENGTH;
+
+  const [testLength, setTestLength] = useState(initLength);
+
+  const [correctLength, setCorrectLength] = useState(0);
 
   //const testToggle = false;
 
@@ -66,52 +73,40 @@ function Test1() {
     }
   }, [currentClip])
 
-  // useEffect(() => {
-  //   if(testToggle) {
-
-      
-  //     setPlayAudio(true)
-  //     console.log(playAudio)
-  //   }
-  //   else {
-  //     setPlayAudio(false)
-  //   }
-
-  // }, [audioUrl])
-
   const handleWordSelect = async word => {
 
-    if(tryWord) {
-      if(testArray.length > 0) {
+    if (tryWord) {
+      if (testArray.length > 0) {
 
         let selObj = testArray.find(item => item.word === word)
         setAudioUrl(apiEndpoint + '/api/get/audio/' + selObj.src)
 
         const audioElement = document.getElementById('audio-player');
 
-      if(audioElement) {
+        if (audioElement) {
 
-        // console.log(audioElement.currentTime)
-        // console.log(audioElement.paused)
-        // console.log(audioElement.ended)
-        // console.log(audioElement.readyState)
-        // console.log(audioElement.HAVE_CURRENT_DATA)
-        audioElement.pause() // no apperent effect
-        
-        console.log(audioElement.currentTime)
-        audioElement.play().catch(error => {
-          // todo: find a permenent solution
-          audioElement.play();
-          console.error('Failed to play audio: ' + error)
-        });
-      }
+          // console.log(audioElement.currentTime)
+          // console.log(audioElement.paused)
+          // console.log(audioElement.ended)
+          // console.log(audioElement.readyState)
+          // console.log(audioElement.HAVE_CURRENT_DATA)
+          audioElement.pause() // no apperent effect
+
+          console.log(audioElement.currentTime)
+          audioElement.play().catch(error => {
+            // todo: find a permenent solution
+            audioElement.play();
+            console.error('Failed to play audio: ' + error)
+          });
+        }
 
       }
     }
     else {
       //setSelectedWord(word);
-      if (word == currentClip.word){
+      if (word == currentClip.word) {
         setMessage('Correct!')
+        setCorrectLength(correctLength + 1)
       }
       else {
         setMessage('Incorrect!')
@@ -122,30 +117,18 @@ function Test1() {
             correctButton.style.backgroundColor = '';
           }, 1000);
         }
-
       }
-      setShowPopup(true);
+      setShowImmediateResultPopup(true);
     }
-    
-    
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
+  const handleCloseImmediateResultPopup = () => {
+    setShowImmediateResultPopup(false);
     handleClose();
+    setTestLength(testLength - 1)
     setClipToggle(!clipToggle);
-  };
 
-  // const fetchAudio = async () => {
-  //   console.log("fetching audio")
-  //   try {
-  //     console.log('current clip obj: ')
-  //     console.log(currentClip)
-  //     const response = await axios.get(apiEndpoint + '/api/get/audio/' + currentClip.src)
-  //   } catch (error) {
-  //     console.error('Error fetching audio: ', error);
-  //   }
-  // }
+  };
 
   const fetchArray = async () => {
     try {
@@ -158,23 +141,48 @@ function Test1() {
     }
   }
 
+  const startNew = () => {
+
+    setShowStartNewPopup(true);
+
+  }
+
+  const handleStartnewPopup = () => {
+
+    setTestLength(initLength);
+    setCorrectLength(0);
+    handleStartnewClosePopup();
+
+  }
+
+  const handleStartnewClosePopup = () => {
+
+    setShowStartNewPopup(false);
+    handleClose();
+
+  }
+
   return (
     <>
-    <FormGroup>
-      <FormControlLabel control={<Switch checked={tryWord} onChange={ (e) => setTryWord(e.target.checked)}/>} label="try!" />
-    </FormGroup>
+      <div>Remaining: {testLength}</div>
+      <FormGroup>
+        <FormControlLabel control={<Switch checked={tryWord} onChange={(e) => setTryWord(e.target.checked)} />} label="try!" />
+      </FormGroup>
 
       <div className="audio-player"><AudioPlayer src={audioUrl} play={false} /></div>
-      
+
       {testArray && (
         <WordSelector words={testArray} onSelect={handleWordSelect} />
       )}
-      {showPopup && (
+
+      <div><Button id='start-new' key='Start New Test' variant='outlined' onClick={() => startNew()}>Start New
+      </Button></div>
+      {showImmediateResultPopup && (
         <div className="popup">
 
           <Modal
             open={true}
-            onClose={handleClose}
+            onClose={handleCloseImmediateResultPopup}
           >
             <Box sx={{
               position: 'absolute',
@@ -190,7 +198,7 @@ function Test1() {
               <div>{message}
               </div>
 
-              <Button onClick={handleClosePopup}>Close</Button>
+              <Button onClick={handleCloseImmediateResultPopup}>Close</Button>
 
             </Box>
 
@@ -199,6 +207,40 @@ function Test1() {
 
         </div>
       )}
+
+      {showStartNewPopup && (
+        <div className="popup">
+
+          <Modal
+            open={true}
+            onClose={handleStartnewClosePopup}
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}>
+              <div>Do you want to start new?
+              </div>
+              <Button onClick={handleStartnewPopup}>Start New</Button>
+              <Button onClick={handleStartnewClosePopup}>Close</Button>
+
+            </Box>
+
+          </Modal>
+          {open}
+
+        </div>
+
+
+      )}
+
     </>
 
 
