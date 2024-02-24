@@ -22,7 +22,7 @@ function Test1() {
   const [clipToggle, setClipToggle] = React.useState(false);
   //const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [tryWord, setTryWord] = useState(false);
+  const [tryWord, setTryWord] = useState(true);
 
   // Access the API endpoint
   const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
@@ -73,6 +73,15 @@ function Test1() {
     }
   }, [currentClip])
 
+  useEffect(() => {
+    if (testLength == 0) {
+      setTryWord(true);
+      console.log(tryWord);
+      alert('Test Result: ' + correctLength + '/' + initLength);
+      setShowStartNewPopup(true);
+    }
+  }, [testLength])
+
   const handleWordSelect = async word => {
 
     if (tryWord) {
@@ -81,23 +90,34 @@ function Test1() {
         let selObj = testArray.find(item => item.word === word)
         setAudioUrl(apiEndpoint + '/api/get/audio/' + selObj.src)
 
+        const audioPlayElement = document.getElementById('audio-play-button');
+
+        const audioPauseElement = document.getElementById('audio-play-button');
+
         const audioElement = document.getElementById('audio-player');
 
-        if (audioElement) {
+        if (audioPlayElement && audioPauseElement) {
 
           // console.log(audioElement.currentTime)
           // console.log(audioElement.paused)
           // console.log(audioElement.ended)
-          // console.log(audioElement.readyState)
+          //console.log('ready state')
+          //console.log(audioElement.readyState)
           // console.log(audioElement.HAVE_CURRENT_DATA)
-          audioElement.pause() // no apperent effect
 
-          console.log(audioElement.currentTime)
-          audioElement.play().catch(error => {
-            // todo: find a permenent solution
-            audioElement.play();
+          //console.log(audioPlayElement.currentTime)
+
+          try {
+            setTimeout(() => {
+              //audioPauseElement.click()
+              audioPlayElement.click();
+              console.log(audioElement.readyState)
+            }, 2000);
+          }
+          catch (error) {
             console.error('Failed to play audio: ' + error)
-          });
+          }
+
         }
 
       }
@@ -125,7 +145,7 @@ function Test1() {
   const handleCloseImmediateResultPopup = () => {
     setShowImmediateResultPopup(false);
     handleClose();
-    setTestLength(testLength - 1)
+    setTestLength(testLength - 1);
     setClipToggle(!clipToggle);
 
   };
@@ -149,6 +169,7 @@ function Test1() {
 
   const handleStartnewPopup = () => {
 
+    setTryWord(false);
     setTestLength(initLength);
     setCorrectLength(0);
     handleStartnewClosePopup();
@@ -164,19 +185,24 @@ function Test1() {
 
   return (
     <>
-      <div>Remaining: {testLength}</div>
-      <FormGroup>
+      {/* <div>Remaining: {testLength}</div> */}
+      {/* <FormGroup>
         <FormControlLabel control={<Switch checked={tryWord} onChange={(e) => setTryWord(e.target.checked)} />} label="try!" />
-      </FormGroup>
+      </FormGroup> */}
 
-      <div className="audio-player"><AudioPlayer src={audioUrl} play={false} /></div>
+      <div className='start-new-button'><Button id='start-new' key='Start New Test' variant='outlined' onClick={() => startNew()}>Start New
+      </Button></div>
+
+      {tryWord ? (
+        <div className="audio-player" style={{ display: 'none' }}><AudioPlayer src={audioUrl} play={false} /></div>
+      ) : (
+        <div className="audio-player"><AudioPlayer src={audioUrl} play={false} /></div>
+      )}
 
       {testArray && (
         <WordSelector words={testArray} onSelect={handleWordSelect} />
       )}
 
-      <div><Button id='start-new' key='Start New Test' variant='outlined' onClick={() => startNew()}>Start New
-      </Button></div>
       {showImmediateResultPopup && (
         <div className="popup">
 
@@ -198,7 +224,7 @@ function Test1() {
               <div>{message}
               </div>
 
-              <Button onClick={handleCloseImmediateResultPopup}>Close</Button>
+              <Button variant='outlined' onClick={handleCloseImmediateResultPopup}>Close</Button>
 
             </Box>
 
@@ -228,9 +254,10 @@ function Test1() {
             }}>
               <div>Do you want to start new?
               </div>
-              <Button onClick={handleStartnewPopup}>Start New</Button>
-              <Button onClick={handleStartnewClosePopup}>Close</Button>
-
+              <div className='start-new-popup'>
+                <Button variant='outlined' onClick={handleStartnewPopup}>Start New</Button>
+                <Button variant='outlined' onClick={handleStartnewClosePopup}>Cancel</Button>
+              </div>
             </Box>
 
           </Modal>
@@ -238,11 +265,9 @@ function Test1() {
 
         </div>
 
-
       )}
 
     </>
-
 
   );
 };
