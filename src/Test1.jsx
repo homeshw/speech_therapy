@@ -61,7 +61,7 @@ function Test1() {
   }, []);
 
   useEffect(() => {
-    if (testArray) {
+    if (testArray != null && testArray.length > 0) {
       selectRandomClip()
     }
   }, [testArray, clipToggle])
@@ -76,7 +76,7 @@ function Test1() {
   const handleWordSelect = async word => {
 
     if (tryWord) {
-      if (testArray.length > 0) {
+      if (testArray != null && testArray.length > 0) {
 
         let selObj = testArray.find(item => item.word === word)
         setAudioUrl(apiEndpoint + '/api/get/audio/' + selObj.src)

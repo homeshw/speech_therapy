@@ -91,7 +91,7 @@ function RecordPage() {
 
     return (
         <>
-            <div class='audio-recorder'><AudioRecorder
+            <div className='audio-recorder'><AudioRecorder
                 onRecordingComplete={(blob) => addAudioElement(blob)}
                 //onRecordingComplete={(blob) => handleFileChange(blob)}
                 recorderControls={recorderControls}
