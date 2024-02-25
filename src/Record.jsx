@@ -1,11 +1,13 @@
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import './App.css';
+import { StyledEngineProvider } from '@mui/material/styles';
+import AudioGrid from './AudioGrid';
 
 const style = {
     position: 'absolute',
@@ -27,6 +29,7 @@ function RecordPage() {
     const [fileName, setFileName] = useState('');
 
     const [showPopup, setShowPopup] = useState(false);
+    const [testArray, setTestArray] = useState(null);
 
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = React.useState(false);
@@ -41,11 +44,31 @@ function RecordPage() {
     useEffect(() => {
     }, [refresh])
 
+    const effectRan = useRef(false);
+
+    useEffect(() => {
+        if (effectRan.current || process.env.NODE_ENV !== "development") {
+            fetchArray();
+        }
+        return () => effectRan.current = true;
+    }, [refresh]);
+
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
         setUrl(url);
         setShowPopup(true)
     };
+
+    const fetchArray = async () => {
+        try {
+            const response = await axios.get(apiEndpoint + '/api/get/allwords');
+            console.log('fetch all words')
+            console.log(response['data'])
+            setTestArray(response['data'])
+        } catch (error) {
+            console.error('Error fetching audio: ', error);
+        }
+    }
 
     const handleFileUpload = async (f) => {
 
@@ -91,13 +114,22 @@ function RecordPage() {
 
     return (
         <>
-            <div className='audio-recorder'><AudioRecorder
+            <div><AudioRecorder
                 onRecordingComplete={(blob) => addAudioElement(blob)}
                 //onRecordingComplete={(blob) => handleFileChange(blob)}
                 recorderControls={recorderControls}
             /></div>
 
-
+            {
+                testArray && testArray!= undefined && testArray.length > 0 ? (
+                    <div>
+                        {/* {testArray.map(test => <div>{test.word}</div>)} */}
+                        <AudioGrid rows={testArray}></AudioGrid>
+                    </div>
+                )
+                :
+                <div></div>
+            }
 
             {showPopup && (
                 <div className="popup">

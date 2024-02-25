@@ -74,13 +74,15 @@
 }
 
 .audio-recorder {
+  margin-bottom: 50px;
   margin-top: 50px;
+  margin-left: 50px;
 }
 
 .record-popup-button-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  margin-top: 20px;
 }
 
 .button-text {
