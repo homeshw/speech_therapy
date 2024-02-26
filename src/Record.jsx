@@ -27,14 +27,20 @@ function RecordPage() {
     const [url, setUrl] = useState(null);
 
     const [fileName, setFileName] = useState('');
+    const [newTestName, setNewTestName] = useState('');
 
     const [showPopup, setShowPopup] = useState(false);
+    const [showCreateTestPopup, setShowCreateTestPopup] = useState(false);
+
     const [testArray, setTestArray] = useState(null);
+    const [selectedRows, setSelectedRows] = useState(null);
 
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
 
     // Access the API endpoint
     const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
@@ -112,6 +118,26 @@ function RecordPage() {
         setRefresh(!refresh);
     };
 
+    const createNewTest = () => {
+        setShowCreateTestPopup(true);
+    }
+
+    const handleCreateNewTestConfirmation = () => {
+        alert(newTestName + 'created');
+    }
+
+    const handleCloseNewTestPopup = () => {
+        setShowCreateTestPopup(false);
+    }
+
+    const handleRowSelect = (selectedRowIds) => {
+
+        if (testArray) {
+            setSelectedRows(testArray.filter(obj => selectedRowIds.includes(obj.id)))
+        }
+        // setSelectedRowIds(selectedRowIds);
+    };
+
     return (
         <>
             <div><AudioRecorder
@@ -121,15 +147,17 @@ function RecordPage() {
             /></div>
 
             {
-                testArray && testArray!= undefined && testArray.length > 0 ? (
+                testArray && testArray != undefined && testArray.length > 0 ? (
                     <div>
                         {/* {testArray.map(test => <div>{test.word}</div>)} */}
-                        <AudioGrid rows={testArray}></AudioGrid>
+                        <AudioGrid rows={testArray} onRowSelect={handleRowSelect} ></AudioGrid>
                     </div>
                 )
-                :
-                <div></div>
+                    :
+                    <div></div>
             }
+            <div><Button className='' variant="outlined" onClick={createNewTest}>Select Words and Create A Test</Button></div>
+
 
             {showPopup && (
                 <div className="popup">
@@ -154,6 +182,37 @@ function RecordPage() {
 
                 </div>
             )}
+
+            {showCreateTestPopup && (selectedRows ? selectedRows.length>0 ? 
+                (
+                <div className="popup">
+
+                    <Modal open={true} onClose={handleClose}>
+
+                        <Box sx={style}>
+
+                            Do you want to create a test with following words?
+                            <div>
+                                { selectedRows ? selectedRows.map(obj => obj.word).join(', ') : '' }
+                            </div>
+                            
+
+                            <TextField id="label" label="Test Name" variant="outlined" onChange={(e) => setNewTestName(e.target.value)} />
+                            <div className="record-popup-button-container">
+                                <Button className='popup-button' variant="contained" onClick={handleCreateNewTestConfirmation}>Create New Test</Button>
+                                <Button className='popup-button' variant="outlined" onClick={handleCloseNewTestPopup}>Cancel Saving</Button>
+                            </div>
+                        </Box>
+
+                    </Modal>
+                    {open}
+
+                </div>
+            )
+            :
+            alert('please select some words first')
+            :
+            alert('please select some words first'))}
         </>
 
     )
