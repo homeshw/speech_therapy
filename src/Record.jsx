@@ -96,7 +96,7 @@ function RecordPage() {
             formData.append('file', audioFile);
             formData.append('word', fileName);
 
-            await axios.post(apiEndpoint + '/api/upload', formData, {
+            await axios.post(apiEndpoint + '/api/upload/audio', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -122,18 +122,31 @@ function RecordPage() {
         setShowCreateTestPopup(true);
     }
 
-    const handleCreateNewTestConfirmation = () => {
-        alert(newTestName + 'created');
+    const handleCreateNewTestConfirmation = async () => {
+        //alert(newTestName + 'created');
+        console.log(selectedRows);
+        handleCloseNewTestPopup();
+        if(selectedRows){
+            const TestBody = {'name':newTestName,'ids':selectedRowIds};
+            await axios.post(apiEndpoint + '/api/upload/test', TestBody, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        }
+                
     }
 
     const handleCloseNewTestPopup = () => {
         setShowCreateTestPopup(false);
+
     }
 
-    const handleRowSelect = (selectedRowIds) => {
+    const handleRowSelect = (rows) => {
 
         if (testArray) {
-            setSelectedRows(testArray.filter(obj => selectedRowIds.includes(obj.id)))
+            setSelectedRows(testArray.filter(obj => rows.includes(obj.id)))
+            setSelectedRowIds(rows);
         }
         // setSelectedRowIds(selectedRowIds);
     };
