@@ -15,8 +15,8 @@ function MainPage() {
             <Link to="/Record"> <IconButton><div><img src={IconMic} alt="Your Image" style={{ width: '20%', height: '20%' }} /> <Typography variant="body2" color="textSecondary">
                 Record
             </Typography></div></IconButton></Link>
-            <Link to="/Test1"> <IconButton><div><img src={IconTest} alt="Your Image" style={{ width: '20%', height: '20%' }} /><Typography variant="body2" color="textSecondary">
-                Test 1
+            <Link to="/Tests"> <IconButton><div><img src={IconTest} alt="Your Image" style={{ width: '20%', height: '20%' }} /><Typography variant="body2" color="textSecondary">
+                Tests
             </Typography></div></IconButton></Link>       
 
             {/* <div>

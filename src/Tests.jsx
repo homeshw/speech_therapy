@@ -10,8 +10,9 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
 import './App.css';
+import TestSelector from './TestSelector';
 
-function Test1() {
+function Tests() {
   //const [selectedWord, setSelectedWord] = useState(null);
   const [currentClip, setCurrentClip] = useState({});
   const [message, setMessage] = useState({});
@@ -33,6 +34,8 @@ function Test1() {
 
   const [correctLength, setCorrectLength] = useState(0);
 
+  const [testName, setTestName] = React.useState('');
+
   //const testToggle = false;
 
   //console.log(window.config.REACT_APP_API_ENDPOINT);
@@ -42,6 +45,11 @@ function Test1() {
   const [audioUrl, setAudioUrl] = useState('');
 
   const [testArray, setTestArray] = useState(null);
+
+  const [testList, setTestList] = useState(null);
+
+  const [selectedTestId, setSelectedTestId] = useState('');
+
 
   //let audioRef = useRef(null);
 
@@ -55,16 +63,22 @@ function Test1() {
 
   useEffect(() => {
     if (effectRan.current || process.env.NODE_ENV !== "development") {
-      fetchArray();
+      //fetchArray();
+      fetchTestList();
     }
     return () => effectRan.current = true;
   }, []);
+
+  useEffect(() => {
+    fetchArray();
+  }, [selectedTestId])
 
   useEffect(() => {
     if (testArray != null && testArray.length > 0) {
       selectRandomClip()
     }
   }, [testArray, clipToggle])
+
 
   useEffect(() => {
     if (Object.keys(currentClip).length > 0) {
@@ -151,13 +165,27 @@ function Test1() {
   };
 
   const fetchArray = async () => {
+    if (selectedTestId) {
+      try {
+        const response = await axios.get(apiEndpoint + '/api/get/testarray?testid=' + selectedTestId);
+        console.log('fetch test array')
+        console.log(response['data'])
+        setTestArray(response['data'])
+      } catch (error) {
+        console.error('Error fetching test data: ', error);
+      }
+    }
+  }
+
+  //:TODO
+  const fetchTestList = async () => {
     try {
-      const response = await axios.get(apiEndpoint + '/api/get/testarray');
-      console.log('fetch test array')
+      const response = await axios.get(apiEndpoint + '/api/get/testlist');
+      console.log('fetch test list')
       console.log(response['data'])
-      setTestArray(response['data'])
+      setTestList(response['data'])
     } catch (error) {
-      console.error('Error fetching audio: ', error);
+      console.error('Error fetching test list: ', error);
     }
   }
 
@@ -183,12 +211,15 @@ function Test1() {
 
   }
 
+  const handleTestSelectionChange = (event) => {
+    setTestName(event.target.value);
+  };
+
+
   return (
     <>
-      {/* <div>Remaining: {testLength}</div> */}
-      {/* <FormGroup>
-        <FormControlLabel control={<Switch checked={tryWord} onChange={(e) => setTryWord(e.target.checked)} />} label="try!" />
-      </FormGroup> */}
+
+      {testList && (<TestSelector testList={testList} propSetSelectedTestId={setSelectedTestId}></TestSelector>)}
 
       <div className='start-new-button'><Button id='start-new' key='Start New Test' variant='outlined' onClick={() => startNew()}>Start New
       </Button></div>
@@ -272,4 +303,4 @@ function Test1() {
   );
 };
 
-export default Test1;
+export default Tests;

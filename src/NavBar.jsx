@@ -14,7 +14,7 @@ function NavBar(){
               <Nav className="me-auto">
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/Record">Record</Nav.Link>
-                <Nav.Link href="/Test1">Test 1</Nav.Link>
+                <Nav.Link href="/Tests">Tests</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Test1 from './Test1';
+import Tests from './Tests';
 import RecordPage from './Record';
 import MainPage from './Main';
 import NavBar from './NavBar';
@@ -14,7 +14,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/test1" element={<Test1 />} />
+          <Route path="/tests" element={<Tests />} />
           <Route path="/record" element={<RecordPage />} />
         </Routes>
       </Router>
