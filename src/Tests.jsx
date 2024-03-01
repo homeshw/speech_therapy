@@ -91,7 +91,9 @@ function Tests() {
     if (testLength == 0) {
       setTryWord(true);
       console.log(tryWord);
-      alert('Test Result: ' + correctLength + '/' + initLength);
+
+      sendTestResult().then(alert('Test Result: ' + correctLength + '/' + initLength));
+
       setShowStartNewPopup(true);
     }
   }, [testLength])
@@ -214,6 +216,16 @@ function Tests() {
   const handleTestSelectionChange = (event) => {
     setTestName(event.target.value);
   };
+
+  const sendTestResult = async () => {
+    const TestBody = { 'testId': selectedTestId, 'correct': correctLength, 'total': initLength };
+    console.log(TestBody);
+    await axios.post(apiEndpoint + '/api/upload/testresult', TestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  }
 
 
   return (

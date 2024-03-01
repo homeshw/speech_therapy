@@ -126,15 +126,29 @@ function RecordPage() {
         //alert(newTestName + 'created');
         console.log(selectedRows);
         handleCloseNewTestPopup();
-        if(selectedRows){
-            const TestBody = {'name':newTestName,'ids':selectedRowIds};
-            await axios.post(apiEndpoint + '/api/upload/test', TestBody, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+        try {
+            if (selectedRows) {
+                const TestBody = { 'name': newTestName, 'ids': selectedRowIds };
+                await axios.post(apiEndpoint + '/api/upload/test', TestBody, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(alert(newTestName + ' created'));
+
+            }
+        } catch (error) {
+            // Check if the error is a validation error
+            if (error.response && error.response.status === 422) {
+                // Set the validation error message
+                alert('Duplicate test name found! Please choose another name.');
+            } else {
+                // Handle other errors
+                console.error('An error occurred:', error.message);
+            }
+
         }
-                
+
+
     }
 
     const handleCloseNewTestPopup = () => {
@@ -149,6 +163,12 @@ function RecordPage() {
             setSelectedRowIds(rows);
         }
         // setSelectedRowIds(selectedRowIds);
+    };
+
+    const handleCreateNewPopupError = (message) => {
+
+        handleCloseNewTestPopup();
+        alert(message);
     };
 
     return (
@@ -196,36 +216,34 @@ function RecordPage() {
                 </div>
             )}
 
-            {showCreateTestPopup && (selectedRows ? selectedRows.length>0 ? 
+            {showCreateTestPopup && (selectedRows && selectedRows.length > 0 ?
                 (
-                <div className="popup">
+                    <div className="popup">
 
-                    <Modal open={true} onClose={handleClose}>
+                        <Modal open={true} onClose={handleClose}>
 
-                        <Box sx={style}>
+                            <Box sx={style}>
 
-                            Do you want to create a test with following words?
-                            <div>
-                                { selectedRows ? selectedRows.map(obj => obj.word).join(', ') : '' }
-                            </div>
-                            
+                                Do you want to create a test with following words?
+                                <div>
+                                    {selectedRows ? selectedRows.map(obj => obj.word).join(', ') : ''}
+                                </div>
 
-                            <TextField id="label" label="Test Name" variant="outlined" onChange={(e) => setNewTestName(e.target.value)} />
-                            <div className="record-popup-button-container">
-                                <Button className='popup-button' variant="contained" onClick={handleCreateNewTestConfirmation}>Create New Test</Button>
-                                <Button className='popup-button' variant="outlined" onClick={handleCloseNewTestPopup}>Cancel Saving</Button>
-                            </div>
-                        </Box>
 
-                    </Modal>
-                    {open}
+                                <TextField id="label" label="Test Name" variant="outlined" onChange={(e) => setNewTestName(e.target.value)} />
+                                <div className="record-popup-button-container">
+                                    <Button className='popup-button' variant="contained" onClick={handleCreateNewTestConfirmation}>Create New Test</Button>
+                                    <Button className='popup-button' variant="outlined" onClick={handleCloseNewTestPopup}>Cancel Saving</Button>
+                                </div>
+                            </Box>
 
-                </div>
-            )
-            :
-            alert('please select some words first')
-            :
-            alert('please select some words first'))}
+                        </Modal>
+                        {open}
+
+                    </div>
+                )
+                :
+                handleCreateNewPopupError('please select some words first'))}
         </>
 
     )
