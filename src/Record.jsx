@@ -68,8 +68,8 @@ function RecordPage() {
     const fetchArray = async () => {
         try {
             const response = await axios.get(apiEndpoint + '/api/get/allwords');
-            console.log('fetch all words')
-            console.log(response['data'])
+            console.log('fetching all words')
+            // console.log(response['data'])
             setTestArray(response['data'])
         } catch (error) {
             console.error('Error fetching audio: ', error);
@@ -148,6 +148,19 @@ function RecordPage() {
 
         }
 
+    }
+
+    const deleteAudio = async (id) => {
+        console.log('deleting audio');
+
+        try {
+            await axios.delete(apiEndpoint + '/api/delete/audio?audioid=' + id)
+                .then(alert('successfully deleted'))
+                .then(setRefresh(!refresh));
+        } catch (error) {
+            console.log('error deleting the audio file id ' + id + error);
+            alert('error deleting the file')
+        }
 
     }
 
@@ -171,6 +184,14 @@ function RecordPage() {
         alert(message);
     };
 
+    const handleRowDelete = (id) => () => {
+
+        if (id) {
+            console.log(id);
+            deleteAudio(id);
+        }
+    };
+
     return (
         <>
             <div><AudioRecorder
@@ -183,12 +204,13 @@ function RecordPage() {
                 testArray && testArray != undefined && testArray.length > 0 ? (
                     <div>
                         {/* {testArray.map(test => <div>{test.word}</div>)} */}
-                        <AudioGrid rows={testArray} onRowSelect={handleRowSelect} ></AudioGrid>
+                        <AudioGrid rows={testArray} onRowSelect={handleRowSelect} onRowDelete={handleRowDelete}></AudioGrid>
                     </div>
                 )
                     :
                     <div></div>
             }
+
             <div><Button className='' variant="outlined" onClick={createNewTest}>Select Words and Create A Test</Button></div>
 
 
@@ -251,6 +273,3 @@ function RecordPage() {
 }
 
 export default RecordPage;
-
-
-

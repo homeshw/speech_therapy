@@ -1,32 +1,42 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import {
+    DataGrid,
+    GridActionsCellItem
+} from '@mui/x-data-grid'
 
 
-const AudioGrid = ({ rows, onRowSelect }) => {
+const AudioGrid = ({ rows, onRowSelect, onRowDelete }) => {
 
-    const [selectedRows, setSelectedRows] = React.useState([]);
-    
     const columns = [
         {
             field: 'word',
             headerName: 'Word',
             width: 150,
             editable: true,
+        }, {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            cellClassName: 'actions',
+            getActions: ({ id }) => {
+                return [
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={onRowDelete(id)}
+                        color="inherit"
+                    />,
+                ];
+            }
         }
     ];
 
     const handleRowSelection = (e) => {
-        // Retrieve the indexes of selected rows
-        console.log(e);
-    
-        // Update the state with the selected rows
-        setSelectedRows(e);
-        console.log(e);
         onRowSelect(e);
-      };
-
-    console.log(rows)
+    };
 
     return (
         <Box sx={{ height: 400, width: '100%' }}>
