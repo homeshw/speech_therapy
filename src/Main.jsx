@@ -17,7 +17,10 @@ function MainPage() {
             </Typography></div></IconButton></Link>
             <Link to="/Tests"> <IconButton><div><img src={IconTest} alt="Your Image" style={{ width: '20%', height: '20%' }} /><Typography variant="body2" color="textSecondary">
                 Tests
-            </Typography></div></IconButton></Link>       
+            </Typography></div></IconButton></Link>   
+            <Link to="/Dashboard"> <IconButton><div><img src={IconTest} alt="Your Image" style={{ width: '20%', height: '20%' }} /><Typography variant="body2" color="textSecondary">
+                Dashboard
+            </Typography></div></IconButton></Link>     
 
             {/* <div>
                 <a style={{display:false}} href="https://www.flaticon.com/free-icons/exam" title="exam icons">Exam icons created by RIkas Dzihab - Flaticon</a>
