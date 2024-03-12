@@ -1,4 +1,4 @@
-import ResultsGrid from "./ResultsGrid";
+import ResultsGrid from "../ResultsGrid";
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 

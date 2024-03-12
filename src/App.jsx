@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Tests from './Tests';
-import RecordPage from './Record';
-import Dashboard from './Dashboard';
-import MainPage from './Main';
-import NavBar from './NavBar';
+import React, {  } from 'react';
+import Tests from './Pages/Tests';
+import RecordPage from './Pages/Record';
+import Dashboard from './Pages/Dashboard';
+import MainPage from './Pages/Main';
+import NavBar from './Components/NavBar';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 

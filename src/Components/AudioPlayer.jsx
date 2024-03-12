@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import IconPlay from './static/play.png'
+import IconPlay from '../static/play.png'
+import IconPlay2 from '../static/sound_play.gif'
 
 const AudioPlayer = ({ src, play }) => {
   const audioRef = useRef(null);
@@ -30,14 +31,19 @@ const AudioPlayer = ({ src, play }) => {
         Your browser does not support the audio element.
       </audio>
       {/* <button id="audio-play-button" onClick={handlePlayButton}>Play Audio</button> */}
-      <IconButton id="audio-play-button" onClick={handlePlayButton}><div><img src={IconPlay} alt="Your Image" style={{ width: '20%', height: '20%' }} /><Typography variant="body2" color="textSecondary">
-                Play
-            </Typography></div></IconButton>
-      <button id="audio-pause-button" style={{display:'none'}}onClick={handlePauseButton}>Pause Audio</button>
+      <IconButton id="audio-play-button" onClick={handlePlayButton}>
+        <div>
+          <img src={IconPlay2} alt="Your Image" style={{ width: '20%', height: '20%' }}/>
+          <Typography variant="body2" color="textSecondary">
+            Play
+          </Typography>
+        </div>
+      </IconButton>
+      <button id="audio-pause-button" style={{ display: 'none' }} onClick={handlePauseButton}>Pause Audio</button>
     </div>
   );
 };
 
 export default AudioPlayer;
 
-{/* <a href="https://www.flaticon.com/free-icons/video" title="video icons">Video icons created by Bingge Liu - Flaticon</a> */}
+{/* <a href="https://www.flaticon.com/free-icons/video" title="video icons">Video icons created by Bingge Liu - Flaticon</a> */ }
