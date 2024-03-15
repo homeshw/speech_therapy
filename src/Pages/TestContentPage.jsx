@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AudioPlayer from "../Components/AudioPlayer";
 import { Container, Row, Col } from "react-bootstrap";
-import axios from 'axios';
 import WordSelector from "../Components/WordSelector";
 import correctSoundFile from '../static/sound/correct-ans.wav';
 import wrongSoundFile from '../static/sound/wrong-ans.wav';
-import { BsCheckLg, BsXLg } from "react-icons/bs";
 import { FaCircleXmark, FaCircleCheck } from "react-icons/fa6";
-import Fade from 'react-bootstrap/Fade';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useNavigate } from "react-router-dom";
+import { fetchTestById } from "../Redux/reducers/testSlice";
+import { useSelector, useDispatch } from 'react-redux'
+import { saveResults, saveUserTestResults } from "../Redux/reducers/userTestSlice";
 
 const AnswerStatus = {
     Null: 'Null',
@@ -20,17 +20,19 @@ const AnswerStatus = {
 
 function TestContentPage() {
 
-
-    const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
     const { id } = useParams();
+    const tests = useSelector((state) => state.tests.tests[id])
+    const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
+    
+    const dispatch = useDispatch();
 
     const [audioUrl, setAudioUrl] = useState('');
-    const [testArray, setTestArray] = useState(null);
+
     const [currentClip, setCurrentClip] = useState({});
     const [message, setMessage] = useState("");
 
     const [isPlaying, setIsPlaying] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
 
     const [currentAnswerStatus, setCurrentAnswerStatus] = useState(AnswerStatus.Null);
     const [testCount , setTestCount] = useState(0);
@@ -38,9 +40,16 @@ function TestContentPage() {
 
     const navigate = useNavigate();
 
+    //get all words in the for the test
+    useEffect(()=> {
+
+        dispatch(fetchTestById(id));
+
+    },[dispatch])
+
     const selectRandomClip = () => {
-        const randomIndex = Math.floor(Math.random() * testArray.length);
-        const x = testArray[randomIndex]
+        const randomIndex = Math.floor(Math.random() * tests.length);
+        const x = tests[randomIndex]
         setCurrentClip(x)
     };
 
@@ -56,39 +65,24 @@ function TestContentPage() {
         setIsPlaying(true);
     };
 
+
+    //when data recieved randomely select a word
     useEffect(() => {
 
-        fetchArray();
-        //setAudioUrl(apiEndpoint + '/api/get/audio/' + '116101115116.mp3');
-
-    }, []);
-
-    useEffect(() => {
-
-        if (testArray != null)
+        if (tests != null)
             selectRandomClip();
 
-    }, [testArray])
+    }, [tests])
 
+    
     useEffect(() => {
 
         if (Object.keys(currentClip).length > 0) {
-            console.log(currentClip.src)
             setAudioUrl(apiEndpoint + '/api/get/audio/' + currentClip.src)
         }
 
     }, [currentClip])
 
-    const fetchArray = async () => {
-        if (id) {
-            try {
-                const response = await axios.get(apiEndpoint + '/api/get/testarray?testid=' + id);
-                setTestArray(response['data'])
-            } catch (error) {
-                console.error('Error fetching test data: ', error);
-            }
-        }
-    }
 
     const onAudioPlayCompleted = () => {
 
@@ -110,10 +104,10 @@ function TestContentPage() {
 
         setTestCount((count)=> count + 1);
 
-        setOpen(true);
+        setShowMessage(true);
 
         setTimeout(() => {
-            setOpen(false)
+            setShowMessage(false)
         }, 2000);
     }
 
@@ -121,6 +115,10 @@ function TestContentPage() {
 
         if (testCount == window.config.REACT_APP_TEST1_LENGTH) {
             //complete the test
+
+            dispatch(saveResults({testId : id, correct: correctAnswerCount, total : window.config.REACT_APP_TEST1_LENGTH }))
+
+
             navigate(`/test/completed/${id}`)
         }
 
@@ -174,8 +172,8 @@ function TestContentPage() {
                 </Row>
                 <Row style={{ marginTop: '50px' }}>
                     <Col>
-                        {testArray &&
-                            <WordSelector words={testArray.map((item) => item.word)} onSelect={handleWordSelection} />
+                        {tests != null &&
+                            <WordSelector words={tests.map((item) => item.word)} onSelect={handleWordSelection} />
                         }
 
 
@@ -185,7 +183,7 @@ function TestContentPage() {
             </Container>
 
 
-            <Container fluid className={`bottom-bar ${open ? 'show' : 'fade'}`}
+            <Container fluid className={`bottom-bar ${showMessage ? 'show' : 'fade'}`}
                 style={currentAnswerStatus == AnswerStatus.Null ? whiteStyle :
                     currentAnswerStatus == AnswerStatus.Correct ? greenStyle : redStyle}>
                 <Row>

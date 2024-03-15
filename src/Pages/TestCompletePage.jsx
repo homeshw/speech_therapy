@@ -3,9 +3,12 @@ import Lottie, { useLottie } from 'lottie-react';
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 
 function TestCompletePage() {
 
+
+    const results = useSelector((state) => state.results)
     const [animationData, setAnimationData] = useState(null);
     const animRef = useRef();
     const navigate = useNavigate();
@@ -18,11 +21,11 @@ function TestCompletePage() {
             .catch(error => console.error('Error fetching animation data:', error));
     }, []);
 
-    const onClickRestart = ()=> {
+    const onClickRestart = () => {
         navigate(`/tests/${id}`)
     }
 
-    const onClickMenu = ()=> {
+    const onClickMenu = () => {
         navigate(`/tests`)
     }
 
@@ -35,10 +38,12 @@ function TestCompletePage() {
                         <div>
                             <h1>Test completed</h1>
                         </div>
+                        {results.data && !results.loading &&
+                            <div>
+                                <h3>Score : {`${results.data.correct}/ ${results.data.total}`}</h3>
+                            </div>
+                        }
 
-                        <div>
-                            <h3>Score : 3/5</h3>
-                        </div>
                         <Container>
                             <Row>
                                 <Col>
@@ -57,16 +62,16 @@ function TestCompletePage() {
                                 </Col>
                             </Row>
                         </Container>
-                       
-
-          
-
-                </div>
 
 
 
-            </Col>
-        </Row>
+
+                    </div>
+
+
+
+                </Col>
+            </Row>
 
         </Container >
     )

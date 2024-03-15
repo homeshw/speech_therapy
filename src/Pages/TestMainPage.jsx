@@ -1,75 +1,59 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { TestSet } from "../Components/TestSet";
 import StarImg from '../static/star.svg';
 import axios from 'axios';
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchTestAll } from '../Redux/reducers/testSlice'
 
 
 function TestMainPage() {
 
-    const [testList, setTestList] = useState(null);
-    const navigate = useNavigate();
+    const tests = useSelector((state) => state.tests)
 
-    interface TestInfo {
-        name: string;
-        order: number;
-        style: any;
-    }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const numButtons = 9;
     const amplitude = 30;
     const frequency = 180 / numButtons;
-    const buttons = [];
-
-    for (let i = 0; i < numButtons; i++) {
-        const xPos = Math.sin(i * frequency) * amplitude; // Adjust 100 to position the sine wave vertically
-        const yPos = i * 100;
-
-        const buttonStyle = {
-            position: 'absolute',
-            left: xPos + 'px',
-            top: yPos + 'px',
-        };
-
-        //buttons.push(<TestSet img={StarImg} style={buttonStyle} />);
-        buttons.push({
-            name: 'Test 1',
-            style: buttonStyle,
-            order: i
-        })
-    }
-
-    console.log(buttons)
+    
 
     const containerStyle = {
         position: 'relative',
         height: `${100 * numButtons}px`, // Adjust 200 for additional height
 
     };
-    const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
-
-    const effectRan = useRef(false);
 
     useEffect(() => {
-        if (effectRan.current || process.env.NODE_ENV !== "development") {
-            //fetchArray();
-            fetchTestList();
+        dispatch(fetchTestAll());
+    }, [dispatch])
+
+    const computedTests = useMemo(() => {
+
+        const buttons = [];
+
+        for (let i = 0; i < numButtons; i++) {
+            const xPos = Math.sin(i * frequency) * amplitude; // Adjust 100 to position the sine wave vertically
+            const yPos = i * 100;
+
+            const buttonStyle = {
+                position: 'absolute',
+                left: xPos + 'px',
+                top: yPos + 'px',
+            };
+
+            buttons.push({
+                name: 'Test 1',
+                style: buttonStyle,
+                order: i
+            })
         }
-        return () => effectRan.current = true;
-    }, []);
 
-    
+        return buttons;
 
-
-    const fetchTestList = async () => {
-        try {
-            const response = await axios.get(apiEndpoint + '/api/get/testlist');
-            setTestList(response['data'])
-        } catch (error) {
-            console.error('Error fetching test list: ', error);
-        }
-    }
+    }, [tests])
 
     const handleClick = (e) => {
         navigate(`/tests/${e}`);
@@ -93,12 +77,12 @@ function TestMainPage() {
 
                         <div style={containerStyle}>
 
-                            {testList && buttons.map((bt, index) => {
+                            {tests.testlist.length > 0 && computedTests.map((bt, index) => {
 
-                                const testItem = testList.at(index);
-
+                                const testItem = tests.testlist[index];
+                                console.log(testItem)
                                 return (
-                                    <TestSet img={StarImg} style={bt.style} onClick={(e) => handleClick(testItem.id)} />
+                                    <TestSet key={index} img={StarImg} style={bt.style} onClick={(e) => handleClick(testItem.id)} />
                                 )
 
                             })}
