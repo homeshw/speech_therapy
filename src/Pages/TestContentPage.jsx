@@ -23,29 +23,30 @@ function TestContentPage() {
     const { id } = useParams();
     const tests = useSelector((state) => state.tests.tests[id])
     const apiEndpoint = window.config.REACT_APP_API_ENDPOINT;
-    
+
     const dispatch = useDispatch();
 
     const [audioUrl, setAudioUrl] = useState('');
-
     const [currentClip, setCurrentClip] = useState({});
-    const [message, setMessage] = useState("");
 
+    const [message, setMessage] = useState("");
+    const [currentAnswerStatus, setCurrentAnswerStatus] = useState(AnswerStatus.Null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
 
-    const [currentAnswerStatus, setCurrentAnswerStatus] = useState(AnswerStatus.Null);
-    const [testCount , setTestCount] = useState(0);
-    const [correctAnswerCount ,setCorrectAnswerCount] = useState(0);
+    const [repeatCount, setRepeatCount] = useState(0);
+    const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
+
+    const [stats ,setStats] = useState([]);
 
     const navigate = useNavigate();
 
     //get all words in the for the test
-    useEffect(()=> {
+    useEffect(() => {
 
         dispatch(fetchTestById(id));
 
-    },[dispatch])
+    }, [dispatch])
 
     const selectRandomClip = () => {
         const randomIndex = Math.floor(Math.random() * tests.length);
@@ -74,7 +75,7 @@ function TestContentPage() {
 
     }, [tests])
 
-    
+
     useEffect(() => {
 
         if (Object.keys(currentClip).length > 0) {
@@ -84,25 +85,30 @@ function TestContentPage() {
     }, [currentClip])
 
 
-    const onAudioPlayCompleted = () => {
-
-        //selectRandomClip();
-    }
-
     const handleWordSelection = (word) => {
+
+        const newStat = [...stats];
+        newStat[repeatCount] = {
+            ...stats[repeatCount],
+            answerTime : new Date(Date.now()).toISOString()
+        } ;
+
+        setStats(newStat)
+
+        console.log(newStat);
 
         if (word == currentClip.word) {
             setMessage('Correct!')
             setCurrentAnswerStatus(AnswerStatus.Correct);
             playSound(correctSoundFile);
-            setCorrectAnswerCount((count)=> count + 1);
+            setCorrectAnswerCount((count) => count + 1);
         } else {
             setMessage('Wrong!')
             setCurrentAnswerStatus(AnswerStatus.Incorrect);
             playSound(wrongSoundFile);
         }
         selectRandomClip();
-        setTestCount((count)=> count + 1);
+        setRepeatCount((count) => count + 1);
 
         setShowMessage(true);
 
@@ -111,18 +117,23 @@ function TestContentPage() {
         }, 2000);
     }
 
-    useEffect(()=> {
+    useEffect(() => {
 
-        if (testCount == window.config.REACT_APP_TEST1_LENGTH) {
+        if (repeatCount == window.config.REACT_APP_TEST1_LENGTH) {
             //complete the test
 
-            dispatch(saveResults({testId : id, correct: correctAnswerCount, total : window.config.REACT_APP_TEST1_LENGTH }))
+            dispatch(saveResults({ 
+                testId: id, 
+                correct: correctAnswerCount, 
+                total: window.config.REACT_APP_TEST1_LENGTH,
+                statistics : stats
+            }));
 
 
             navigate(`/test/completed/${id}`)
         }
 
-    },[testCount])
+    }, [repeatCount])
 
     const greenStyle = {
         backgroundColor: `rgb(215,255,184)`,
@@ -139,8 +150,14 @@ function TestContentPage() {
         Opacity: 1
     }
 
-    const onPlayAudio = ()=> {
-        
+    const onPlayAudio = () => {
+        setStats([
+            ...stats,
+            {
+                word: currentClip.word,
+                playTime: new Date(Date.now()).toISOString()
+            }
+        ])
     }
 
     return (
@@ -148,7 +165,7 @@ function TestContentPage() {
             <Container style={{ marginTop: '100px' }}>
                 <Row>
                     <Col>
-                        <ProgressBar variant="info" now={100 * testCount/window.config.REACT_APP_TEST1_LENGTH} />
+                        <ProgressBar variant="info" now={100 * repeatCount / window.config.REACT_APP_TEST1_LENGTH} />
                     </Col>
                 </Row>
                 <Row style={{ marginTop: '60px' }}>
@@ -162,9 +179,7 @@ function TestContentPage() {
                 <Row>
                     <Col>
                         <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-
-                            <AudioPlayer src={audioUrl} play={false} onPlayCompleted={onAudioPlayCompleted} onPlay={onPlayAudio}/>
-
+                            <AudioPlayer src={audioUrl} play={false} onPlay={onPlayAudio} />
                         </div>
 
 
