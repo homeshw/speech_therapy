@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { TestSet } from "../Components/TestSet";
+import React, { useEffect, useMemo } from 'react';
+import { TestUnitButton } from "../Components/TestUnitButton";
 import StarImg from '../static/star.svg';
-import axios from 'axios';
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
@@ -18,7 +17,7 @@ function TestMainPage() {
     const numButtons = 9;
     const amplitude = 30;
     const frequency = 180 / numButtons;
-    
+
 
     const containerStyle = {
         position: 'relative',
@@ -30,34 +29,55 @@ function TestMainPage() {
         dispatch(fetchTestAll());
     }, [dispatch])
 
-    const computedTests = useMemo(() => {
+    // const computedTests = useMemo(() => {
 
-        const buttons = [];
+    //     const buttons = [];
 
-        for (let i = 0; i < numButtons; i++) {
-            const xPos = Math.sin(i * frequency) * amplitude; // Adjust 100 to position the sine wave vertically
-            const yPos = i * 100;
+    //     for (let i = 0; i < numButtons; i++) {
+    //         const xPos = Math.sin(i * frequency) * amplitude; // Adjust 100 to position the sine wave vertically
+    //         const yPos = i * 100;
 
-            const buttonStyle = {
-                position: 'absolute',
-                left: xPos + 'px',
-                top: yPos + 'px',
-            };
+    //         const buttonStyle = {
+    //             position: 'absolute',
+    //             left: xPos + 'px',
+    //             top: yPos + 'px',
+    //         };
 
-            buttons.push({
-                name: 'Test 1',
-                style: buttonStyle,
-                order: i
-            })
+    //         buttons.push({
+    //             name: 'Test 1',
+    //             style: buttonStyle,
+    //             order: i
+    //         })
+    //     }
+
+    //     return buttons;
+
+    // }, [tests])
+
+    const COLS = 4;
+
+    const rowsItems = useMemo(() => {
+
+        const rows = [];
+        for (let i = 0; i < tests.testlist.length; i += COLS) {
+
+            const rowItems = tests.testlist.slice(i, i + COLS);
+            rows.push(rowItems);
         }
 
-        return buttons;
+        return rows;
+
+
 
     }, [tests])
+
 
     const handleClick = (e) => {
         navigate(`/tests/${e}`);
     }
+
+
+
 
     return (
         <Container>
@@ -72,28 +92,38 @@ function TestMainPage() {
 
                     </div> */}
 
+                    
+                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
+                    
+                        <Container>
+                        <h2>Test Modules</h2>
+                            {tests.testlist.length > 0 && rowsItems.map((rowItem, index) => {
 
-                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-
-                        <div style={containerStyle}>
-
-                            {tests.testlist.length > 0 && computedTests.map((bt, index) => {
-
-                                const testItem = tests.testlist[index];
-                                console.log(testItem)
                                 return (
-                                    <TestSet key={index} img={StarImg} style={bt.style} onClick={(e) => handleClick(testItem.id)} />
+                                    <Row key={index}>
+                                        {rowItem.map((testItem,colindex) => {
+                                            return (
+                                                <Col md={3}>
+                                                    <TestUnitButton key={colindex} name={testItem.name} img={StarImg} onClick={(e) => handleClick(testItem.id)} />
+                                                </Col>
+                                            )
+                                        })}
+
+                                    </Row>
+
                                 )
 
                             })}
-                        </div>
+
+                        </Container>
+
                     </div>
 
                 </Col>
             </Row>
 
 
-        </Container>
+        </Container >
     )
 };
 

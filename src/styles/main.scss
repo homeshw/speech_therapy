@@ -5,18 +5,18 @@ body {
 }
 
 button {
-    display: block;
+
 
     border: none;
     padding: 1rem;
     border-radius: 1.5rem;
     background-color: #f6e58d;
     color: #000;
-    transition: all .1s ease 0s;
+    transition: all .02s ease 0s;
     box-shadow: 0 10px #f9ca24;
 
     &:active {
-        box-shadow: 0 5px #f0932b;
+        box-shadow: none;
         transform: translateY(5px);
     }
 
@@ -55,6 +55,27 @@ button {
         min-height: 87px;
         margin-bottom: 50px;
         margin-top: 50px;
+    }
+
+    &.test-button {
+        //background: var(--path-level-color);
+        border-radius: 50% / 50%;
+        //border-radius: 10px;
+        color : white;
+        box-shadow: 0 8px 0 #00000033,0 8px 0 rgb( 206,130,255 );
+        height: 150px;
+        width: 150px;
+        background-color: rgb( 206,130,255 );
+
+        label {
+            font-size: 28px;
+            display: block;
+        }
+
+        &:active {
+            box-shadow: none;
+            
+        }
     }
 }
 
@@ -95,14 +116,7 @@ button {
 }
 
 
-.test-button {
-    //background: var(--path-level-color);
-    border-radius: 50% / 50%;
-    box-shadow: 0 8px 0 rgb(#000, .2), 0 8px 0 rgb(229, 229, 229);
-    height: 57px;
 
-    background-color: rgb(229, 229, 229);
-}
 
 @keyframes bounce {
 

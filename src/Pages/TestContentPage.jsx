@@ -86,7 +86,7 @@ function TestContentPage() {
 
     const onAudioPlayCompleted = () => {
 
-        selectRandomClip();
+        //selectRandomClip();
     }
 
     const handleWordSelection = (word) => {
@@ -101,7 +101,7 @@ function TestContentPage() {
             setCurrentAnswerStatus(AnswerStatus.Incorrect);
             playSound(wrongSoundFile);
         }
-
+        selectRandomClip();
         setTestCount((count)=> count + 1);
 
         setShowMessage(true);
