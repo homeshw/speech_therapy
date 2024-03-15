@@ -1,22 +1,60 @@
-
 body {
     font-family: 'Comic Sans MS', cursive !important;
-    background-color: #767ab2;
+    //background-color: #767ab2;
+    background-color: white;
 }
+
 button {
     display: block;
 
-    
+    border: none;
     padding: 1rem;
-    border-radius: 1.5rem !important;
-    background-color: #f6e58d !important;
-    color: #000 !important;
-    transition: all .5s ease 0s;
-    box-shadow: 0 10px #f9ca24 !important;
+    border-radius: 1.5rem;
+    background-color: #f6e58d;
+    color: #000;
+    transition: all .1s ease 0s;
+    box-shadow: 0 10px #f9ca24;
 
     &:active {
-        box-shadow: 0 5px #f0932b !important;
+        box-shadow: 0 5px #f0932b;
         transform: translateY(5px);
+    }
+
+    &.button-choice {
+
+        background-color: rgb(255, 255, 255);
+        border-width: 2px 2px 4px;
+        border: 2px solid rgb(229, 229, 229);
+        border-radius: 12px;
+        font-size: 19px;
+        line-height: 1.4;
+        padding: 12px 16px;
+
+        align-items: center;
+        color: rgb(75, 75, 75);
+        box-shadow: 0 2px 0 rgb(229, 229, 229);
+
+        min-width: 196px;
+
+        &:hover {
+            background-color: rgb(247, 247, 247);
+        }
+
+        &:active {
+            color: rgb(24, 153, 214);
+            background-color: rgb(221, 244, 255);
+            border: 2px solid rgb(132, 216, 255);
+            box-shadow: none;
+        }
+
+
+    }
+
+    &.button-menu {
+        min-width: 230px;
+        min-height: 87px;
+        margin-bottom: 50px;
+        margin-top: 50px;
     }
 }
 
@@ -24,14 +62,14 @@ button {
 
     font-size: 48px;
     font-weight: bolder;
-    
+
     .part-one {
-        color : #f79f77d9;
+        color: #f79f77d9;
     }
 
     .part-two {
         margin-left: 10px;
-        color : #7cbdf6d9;
+        color: #7cbdf6d9;
 
     }
 
@@ -54,4 +92,132 @@ button {
     color: white;
     text-align: center;
     margin-top: 46px;
+}
+
+
+.test-button {
+    //background: var(--path-level-color);
+    border-radius: 50% / 50%;
+    box-shadow: 0 8px 0 rgb(#000, .2), 0 8px 0 rgb(229, 229, 229);
+    height: 57px;
+
+    background-color: rgb(229, 229, 229);
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.tooltipx {
+
+    position: absolute;
+
+    margin-bottom: -2px;
+    min-width: 80px;
+
+    animation: bounce 1s infinite;
+
+    .tooltipx-label {
+        background-color: rgb(255, 255, 255);
+        color: rgb(206, 130, 255);
+        border: 2px solid #ccc;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        line-height: 1;
+        padding: 12px;
+        text-align: center;
+        text-transform: uppercase;
+
+        border-radius: 10px;
+        width: 80px;
+    }
+
+    .tooltipx-arrow-container {
+
+        height: 10px;
+        overflow: hidden;
+        width: 20px;
+        left: calc(50% - 10px);
+        transform: translateX(-50%) rotate(180deg);
+        position: absolute;
+        background-color: white;
+        top: calc(100% - 2px);
+
+        .tooltipx-arrow {
+
+            border: 2px solid #ccc;
+            border-radius: 2px;
+            content: "";
+            height: 14.14427px;
+            left: 50%;
+            transform: translateZ(0) rotate(45deg);
+            transform-origin: top left;
+            width: 14.14427px;
+            position: absolute;
+        }
+    }
+
+}
+
+h1,
+h2 {
+    font-family: "Nerko One", cursive;
+    font-weight: 100;
+    font-style: normal;
+}
+
+
+.bottom-bar {
+    position: absolute;
+    height: 200px;
+    bottom: 0;
+
+    &.fade {
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+    &.show {
+        opacity: 1;
+    }
+}
+
+.message-icon {
+    font-size: 70px;
+
+    &.message-icon-green {
+        color: #498751;
+    }
+
+    &.message-icon-red {
+        color: red;
+    }
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 1;
+        /* Start from opacity 0 */
+    }
+
+    to {
+        opacity: 0;
+        /* End at opacity 1 */
+    }
+}
+
+
+.bg-info {
+
+    background-color: rgb(124, 189, 246) !important;
 }
