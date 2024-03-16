@@ -3,7 +3,9 @@ import axios from 'axios';
 
 const initialState = {
     loading: false,
-    data: {}
+    data: {},
+    userResults : [],
+    userResultsStats : []
 
 }
 
@@ -18,6 +20,18 @@ export const saveResults = createAsyncThunk('/results/save', async (args) => {
         },
     })
 
+});
+
+export const loadResults = createAsyncThunk('/results/load', async (args) => {
+    const res = await axios.get(apiEndpoint + '/api/get/results/grid');
+
+    return res.data;
+});
+
+export const loadResultsByTestId = createAsyncThunk('/results/loadById', async (id) => {
+    const res = await axios.get(apiEndpoint + '/api/get/results/'+id);
+
+    return res.data;
 });
 
 export const resultsSlice = createSlice({
@@ -35,6 +49,22 @@ export const resultsSlice = createSlice({
                 ...state,
                 loading : false,
                 data : action.meta.arg
+            }
+        })
+
+        builder.addCase(loadResults.fulfilled, (state, action) => {
+            return  {
+                ...state,
+                loading : false,
+                userResults : action.payload
+            }
+        })
+
+        builder.addCase(loadResultsByTestId.fulfilled, (state, action) => {
+            return  {
+                ...state,
+                loading : false,
+                userResultsStats : action.payload
             }
         })
 
