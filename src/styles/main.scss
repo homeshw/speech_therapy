@@ -1,0 +1,239 @@
+@import 'Variable.css';
+
+body {
+    font-family: 'Comic Sans MS', cursive !important;
+    //background-color: #767ab2;
+    background-color: white;
+}
+
+.default-button {
+
+
+    border: none;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    background-color: var(--bg-color-default-button);
+    color: #000;
+    transition: all .02s ease 0s;
+    box-shadow: 0 10px var(--bg-shadow-color-default-button);
+
+    &:active {
+        box-shadow: none;
+        transform: translateY(5px);
+    }
+
+    &.button-choice {
+
+        background-color: var(--bg-color-choice-button);
+        border-width: 2px 2px 4px;
+        border: 2px solid var(--border-color-choice-button);
+        border-radius: 12px;
+        font-size: 19px;
+        line-height: 1.4;
+        padding: 12px 16px;
+
+        align-items: center;
+        color: rgb(75, 75, 75);
+        box-shadow: 0 2px 0 var(--bg-shadow-color-choice-button);
+
+        min-width: 196px;
+
+        &:hover {
+            background-color: var(--bg-hover-color-choice-button);
+        }
+
+        &:active {
+            color: var(--active-color-choice-button);
+            background-color: var(--bg-active-color-choice-button);
+            border: 2px solid var(--active-border-color-choice-button);
+            box-shadow: none;
+        }
+
+
+    }
+
+    &.button-menu {
+        min-width: 230px;
+        min-height: 87px;
+        margin-bottom: 50px;
+        margin-top: 50px;
+    }
+
+    &.test-button {
+        //background: var(--path-level-color);
+        border-radius: 50% / 50%;
+        //border-radius: 10px;
+        color : white;
+        box-shadow: 0 8px 0 #00000033,0 8px 0 var(--bg--shadow-color-test-button);
+        height: 150px;
+        width: 150px;
+        background-color: var(--bg-color-test-button);
+
+        label {
+            font-size: 28px;
+            display: block;
+        }
+
+        &:active {
+            box-shadow: none;
+            
+        }
+    }
+}
+
+.navbar-brand {
+
+    font-size: 48px;
+    font-weight: bolder;
+
+    .part-one {
+        color: var(--navbrand-part-one-color);
+    }
+
+    .part-two {
+        margin-left: 10px;
+        color: var(--navbrand-part-two-color);
+
+    }
+
+}
+
+.main-page-buttons {
+    display: flex;
+    flex-direction: column;
+    /* flex-wrap: nowrap; */
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1%;
+
+    .main-page-button {
+        margin-bottom: 50px;
+    }
+}
+
+.header-text {
+    color: var(--bg-header-color);
+    text-align: center;
+    margin-top: 46px;
+}
+
+
+
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.tooltipx {
+
+    position: absolute;
+
+    margin-bottom: -2px;
+    min-width: 80px;
+
+    animation: bounce 1s infinite;
+
+    .tooltipx-label {
+        background-color: rgb(255, 255, 255);
+        color: rgb(206, 130, 255);
+        border: 2px solid #ccc;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        line-height: 1;
+        padding: 12px;
+        text-align: center;
+        text-transform: uppercase;
+
+        border-radius: 10px;
+        width: 80px;
+    }
+
+    .tooltipx-arrow-container {
+
+        height: 10px;
+        overflow: hidden;
+        width: 20px;
+        left: calc(50% - 10px);
+        transform: translateX(-50%) rotate(180deg);
+        position: absolute;
+        background-color: white;
+        top: calc(100% - 2px);
+
+        .tooltipx-arrow {
+
+            border: 2px solid #ccc;
+            border-radius: 2px;
+            content: "";
+            height: 14.14427px;
+            left: 50%;
+            transform: translateZ(0) rotate(45deg);
+            transform-origin: top left;
+            width: 14.14427px;
+            position: absolute;
+        }
+    }
+
+}
+
+h1,
+h2 {
+    font-family: "Nerko One", cursive;
+    font-weight: 100;
+    font-style: normal;
+}
+
+
+.bottom-bar {
+    position: absolute;
+    height: 200px;
+    bottom: 0;
+
+    &.fade {
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+    &.show {
+        opacity: 1;
+    }
+}
+
+.message-icon {
+    font-size: 70px;
+
+    &.message-icon-green {
+        color: #498751;
+    }
+
+    &.message-icon-red {
+        color: red;
+    }
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 1;
+        /* Start from opacity 0 */
+    }
+
+    to {
+        opacity: 0;
+        /* End at opacity 1 */
+    }
+}
+
+
+.bg-info {
+
+    background-color: rgb(124, 189, 246) !important;
+}

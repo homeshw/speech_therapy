@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AudioPlayer from './AudioPlayer';
-import WordSelector from './WordSelector';
+import AudioPlayer from '../Components/AudioPlayer';
+import WordSelector from '../Components/WordSelector';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Switch from '@mui/material/Switch';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
-import './App.css';
-import TestSelector from './TestSelector';
+
+import TestSelector from '../Components/TestSelector';
 
 function Tests() {
   //const [selectedWord, setSelectedWord] = useState(null);

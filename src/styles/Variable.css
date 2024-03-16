@@ -1,0 +1,25 @@
+:root {
+    --bg-color-test-button : rgba(124, 189, 246, .8509803922);
+    --bg--shadow-color-test-button : var(--bg-color-test-button);
+
+    --bg-color-default-button : #f6e58d;
+    --bg-shadow-color-default-button : #f9ca24;
+
+    --bg-color-choice-button : rgb(255, 255, 255);
+    --border-color-choice-button : rgb(229, 229, 229);
+    --bg-shadow-color-choice-button : var(--border-color-choice-button);
+    --bg-hover-color-choice-button: rgb(247, 247, 247);
+    --active-color-choice-button: rgb(24, 153, 214);
+    --bg-active-color-choice-button: rgb(221, 244, 255);
+    --active-border-color-choice-button : rgb(132, 216, 255);
+
+    --primary-color : #f79f77d9;
+    --secondary-color : #7cbdf6d9;
+
+    --navbrand-part-one-color : var(--primary-color);
+    --navbrand-part-two-color : var(--secondary-color);
+    --bg-header-color : black;
+
+    
+
+}
