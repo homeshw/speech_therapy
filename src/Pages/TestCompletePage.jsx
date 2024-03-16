@@ -56,8 +56,8 @@ function TestCompletePage() {
                                 </Col>
                                 <Col>
                                     <div style={{display:'flex', flexDirection:'column', alignItems: 'flex-start'}}>
-                                        <button className="button-menu" onClick={onClickRestart}>Restart</button>
-                                        <button className="button-menu" onClick={onClickMenu}>Go to menu</button>
+                                        <button className="default-button button-menu" onClick={onClickRestart}>Restart</button>
+                                        <button className="default-button button-menu" onClick={onClickMenu}>Go to menu</button>
                                     </div>
                                 </Col>
                             </Row>

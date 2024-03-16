@@ -5,16 +5,30 @@ import Typography from '@mui/material/Typography';
 import IconMic from '../static/mic.png';
 import IconTest from '../static/test.png';
 import IconDashboard from '../static/dashboard.png';
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
+
+    const navigate = useNavigate();
 
     return (
         <div>
             <h2 className='header-text'>Hey, Are you Ready ? </h2>
 
             <div className='main-page-buttons'>
-
-                <Link to="/Record" className='main-page-button'>
+                <button className="default-button button-menu" onClick={() => navigate('/Record')}>
+                    <img src={IconMic} alt="Your Image" style={{ width: '20%', height: '20%' }} />
+                    Record
+                </button>
+                <button className="default-button button-menu" onClick={() => navigate('/Tests')}>
+                    <img src={IconTest} alt="Your Image" style={{ width: '20%', height: '20%' }} />
+                    Test
+                </button>
+                <button className="default-button button-menu" onClick={() => navigate('/Dashboard')}>
+                    <img src={IconDashboard} alt="Your Image" style={{ width: '20%', height: '20%' }} />
+                    Dashboard
+                </button>
+                {/* <Link to="/Record" className='main-page-button'>
                     <IconButton>
                         <div>
                             <img src={IconMic} alt="Your Image" style={{ width: '20%', height: '20%' }} />
@@ -37,7 +51,7 @@ function MainPage() {
                             Dashboard
                         </div>
                     </IconButton>
-                </Link>
+                </Link> */}
 
                 {/* <div>
                 <a style={{display:false}} href="https://www.flaticon.com/free-icons/exam" title="exam icons">Exam icons created by RIkas Dzihab - Flaticon</a>

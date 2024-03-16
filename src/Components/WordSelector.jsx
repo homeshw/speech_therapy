@@ -8,7 +8,7 @@ const WordSelector = ({ words, onSelect }) => {
     <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-evenly' }}>
       {words && words.map((word) => {
         return (
-          <button className="button-choice" onClick={()=> onSelect(word)}>
+          <button className="default-button button-choice" onClick={()=> onSelect(word)}>
             {word}
           </button>
         )

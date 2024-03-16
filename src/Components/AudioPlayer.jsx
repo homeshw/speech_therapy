@@ -52,7 +52,7 @@ const AudioPlayer = ({ src, play, onPlay }) => {
         Your browser does not support the audio element.
       </audio> */}
       {/* <button id="audio-play-button" onClick={handlePlayButton}>Play Audio</button> */}
-      <button style={{ width: '150px' }} onClick={handlePlayButton}>
+      <button className='default-button' style={{ width: '150px' }} onClick={handlePlayButton}>
         <Lottie lottieRef={speakerAniRef}
           animationData={animationData} // Provide your animation JSON data here
           loop={false}
