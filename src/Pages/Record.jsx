@@ -5,9 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import './App.css';
-import { StyledEngineProvider } from '@mui/material/styles';
-import AudioGrid from './AudioGrid';
+import AudioGrid from '../AudioGrid';
 
 const style = {
     position: 'absolute',
